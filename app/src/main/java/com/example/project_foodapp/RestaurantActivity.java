@@ -2,6 +2,7 @@ package com.example.project_foodapp;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ public class RestaurantActivity extends AppCompatActivity {
     private List<Food> foodList;
     private RelativeLayout btnViewBasket;
     private TextView tvBasketItems, tvBasketTotal;
+    private ImageView btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,11 @@ public class RestaurantActivity extends AppCompatActivity {
         btnViewBasket = findViewById(R.id.btnViewBasket);
         tvBasketItems = findViewById(R.id.tvBasketItems);
         tvBasketTotal = findViewById(R.id.tvBasketTotal);
+        btnBack = findViewById(R.id.btnBack);
+
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
         initFoodData();
         setupRecyclerView();

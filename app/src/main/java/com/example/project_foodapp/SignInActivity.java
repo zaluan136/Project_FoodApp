@@ -40,15 +40,8 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btnSignIn) {
-            String email = txtEmail.getText().toString().trim();
-            String password = txtPassword.getText().toString().trim();
-
-            if (email.isEmpty() || password.isEmpty()) {
-                showToast("Vui lòng nhập Email và Password");
-            } else {
-                openActivity(MainActivity.class);
-                finish();
-            }
+            openActivity(MainActivity.class);
+            finish();
         } else if (id == R.id.btnSignUp) {
             showToast("Chức năng Đăng ký");
         } else if (id == R.id.btnForgot) {
