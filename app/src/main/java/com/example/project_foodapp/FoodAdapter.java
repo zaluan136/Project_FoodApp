@@ -3,7 +3,6 @@ package com.example.project_foodapp;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -41,14 +40,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         holder.tvFoodPrice.setText(formatter.format(item.getPrice()).replace(',', '.') + " VND");
         holder.ivFoodThumb.setImageResource(item.getImageResId());
 
-        if (item.getQuantity() > 0) {
-            holder.btnMinus.setVisibility(View.VISIBLE);
-            holder.tvQuantity.setVisibility(View.VISIBLE);
-            holder.tvQuantity.setText(String.valueOf(item.getQuantity()));
-        } else {
-            holder.btnMinus.setVisibility(View.GONE);
-            holder.tvQuantity.setVisibility(View.GONE);
-        }
+        // Luôn hiển thị số lượng, bỏ đi logic ẩn hiện nút trước đó
+        holder.tvQuantity.setText(String.valueOf(item.getQuantity()));
 
         holder.btnPlus.setOnClickListener(v -> {
             item.setQuantity(item.getQuantity() + 1);
@@ -73,7 +66,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     public static class FoodViewHolder extends RecyclerView.ViewHolder {
         ImageView ivFoodThumb;
         TextView tvFoodName, tvFoodPrice, tvQuantity;
-        Button btnPlus, btnMinus;
+        View btnPlus, btnMinus;
 
         public FoodViewHolder(@NonNull View itemView) {
             super(itemView);
