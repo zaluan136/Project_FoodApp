@@ -57,9 +57,9 @@ public final class StoreCatalog {
     public static List<Store> stores() {
         return Arrays.asList(
             new Store("seven", "7 Eleven", "82 Nguyễn Thị Minh Khai, Quận 3", "Bánh mì · Cà phê · Trà sữa", R.drawable.ic_seveneleven),
-            new Store("circlek", "Circle K", "Chi nhánh mẫu", "Đồ ăn nhanh · Cà phê · Trà sữa", R.drawable.ic_circlek),
-            new Store("ministop", "Ministop", "Chi nhánh mẫu", "Bánh mì · Đồ uống", R.drawable.ic_ministop),
-            new Store("vinmart", "VinMart", "Chi nhánh mẫu", "Bánh mì · Đồ uống", R.drawable.ic_vinmart)
+            new Store("circlek", "Circle K", "Đường Nguyễn Thị Minh Khai, Quận 1", "Đồ ăn nhanh · Cà phê · Trà sữa", R.drawable.ic_circlek),
+            new Store("ministop", "Ministop", "Đường Võ Văn Tần, Quận 3", "Bánh mì · Đồ uống", R.drawable.ic_ministop),
+            new Store("vinmart", "VinMart", "Đường Cách Mạng Tháng Tám, Quận 3", "Bánh mì · Đồ uống", R.drawable.ic_vinmart)
         );
     }
     public static Store find(String id) {

@@ -43,7 +43,7 @@ public class RestaurantActivity extends AppCompatActivity {
         tvBasketTotal = findViewById(R.id.tvBasketTotal);
         ((TextView) findViewById(R.id.tvRestaurantName)).setText(store.name);
         ((TextView) findViewById(R.id.tvRestaurantAddress)).setText(store.address);
-        ((TextView) findViewById(R.id.tvRestaurantHours)).setText("Thực đơn mẫu · " + store.description);
+        ((TextView) findViewById(R.id.tvRestaurantHours)).setText(store.description);
     }
 
     private void setupListeners() {
