@@ -26,13 +26,16 @@ public class MainActivity extends AppCompatActivity {
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText("Restaurants");
+                    tab.setText("Khám phá");
+                    tab.setIcon(R.drawable.icon_home);
                     break;
                 case 1:
-                    tab.setText("Orders");
+                    tab.setText("Đơn hàng");
+                    tab.setIcon(R.drawable.icon_order);
                     break;
                 case 2:
-                    tab.setText("Profile");
+                    tab.setText("Tài khoản");
+                    tab.setIcon(R.drawable.icon_profile);
                     break;
             }
         }).attach();

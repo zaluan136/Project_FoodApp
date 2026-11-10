@@ -20,10 +20,14 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        android.widget.TextView email = view.findViewById(R.id.tvProfileEmail);
+        com.google.firebase.auth.FirebaseUser user = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null && user.getEmail() != null) email.setText(user.getEmail());
         View btnLogout = view.findViewById(R.id.btnLogout);
         if (btnLogout != null) {
             btnLogout.setOnClickListener(v -> {
                 if (getActivity() != null) {
+                    com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
                     Intent intent = new Intent(getActivity(), SignInActivity.class);
                     startActivity(intent);
                     getActivity().finish();

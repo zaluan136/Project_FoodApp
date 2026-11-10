@@ -1,42 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F8F9FA">
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F6F8F4">
+    <androidx.viewpager2.widget.ViewPager2 android:id="@+id/viewPager"
+        android:layout_width="match_parent" android:layout_height="match_parent"
         android:layout_above="@+id/tabLayoutContainer" />
-
-    <LinearLayout
-        android:id="@+id/tabLayoutContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/bg_liquid_glass"
-        android:elevation="8dp"
-        android:padding="4dp">
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@android:color/transparent"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="@color/colorPrimary"
-            app:tabIndicatorHeight="3dp"
-            app:tabMode="fixed"
-            app:tabRippleColor="@android:color/transparent"
-            app:tabSelectedTextColor="@color/colorPrimary"
-            app:tabTextColor="@color/colorLightBlack"
-            tools:ignore="SpeakableTextPresentCheck" />
+    <LinearLayout android:id="@+id/tabLayoutContainer" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp" android:layout_marginEnd="20dp" android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_glass_nav" android:elevation="10dp" android:padding="5dp">
+        <com.google.android.material.tabs.TabLayout android:id="@+id/tabLayout"
+            android:layout_width="match_parent" android:layout_height="64dp"
+            android:background="@android:color/transparent" app:tabGravity="fill"
+            app:tabIconTint="@color/nav_item_color" app:tabTextColor="@color/nav_item_color"
+            app:tabIndicatorHeight="0dp" app:tabMode="fixed" app:tabRippleColor="#1A237A50"
+            app:tabTextAppearance="@style/FoodNowTabText" />
     </LinearLayout>
-
 </RelativeLayout>
