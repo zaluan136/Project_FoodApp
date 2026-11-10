@@ -5,7 +5,32 @@ import { firebaseConfig } from './firebase-config.js';
 const $ = id => document.getElementById(id), message = $('message');
 const auth = getAuth(initializeApp(firebaseConfig)), db = getFirestore();
 let unsubscribe;
-$('loginForm').addEventListener('submit', async e => { e.preventDefault(); message.textContent = ''; try { await signInWithEmailAndPassword(auth, $('email').value, $('password').value); } catch { message.textContent = 'Không thể đăng nhập. Kiểm tra tài khoản và cấu hình Firebase.'; } });
+const loginErrors = {
+  'auth/invalid-credential': 'Email hoặc mật khẩu chưa đúng. Kiểm tra tài khoản trong Firebase Authentication.',
+  'auth/wrong-password': 'Email hoặc mật khẩu chưa đúng. Kiểm tra tài khoản trong Firebase Authentication.',
+  'auth/user-not-found': 'Email hoặc mật khẩu chưa đúng. Kiểm tra tài khoản trong Firebase Authentication.',
+  'auth/invalid-email': 'Địa chỉ email không hợp lệ.',
+  'auth/user-disabled': 'Tài khoản này đã bị vô hiệu hóa trong Firebase Authentication.',
+  'auth/operation-not-allowed': 'Phương thức Email/Password chưa được bật trong Firebase Authentication.',
+  'auth/too-many-requests': 'Đã thử quá nhiều lần. Vui lòng đợi rồi thử lại.',
+  'auth/network-request-failed': 'Không kết nối được Firebase. Kiểm tra kết nối mạng.',
+  'auth/api-key-not-valid': 'Cấu hình Firebase Web chưa đúng. Kiểm tra web/firebase-config.js.',
+  'auth/invalid-api-key': 'Cấu hình Firebase Web chưa đúng. Kiểm tra web/firebase-config.js.'
+};
+$('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  message.textContent = '';
+  if (Object.values(firebaseConfig).some(value => !value || value === 'REPLACE_ME')) {
+    message.textContent = 'Chưa điền cấu hình Firebase Web trong web/firebase-config.js.';
+    return;
+  }
+  try {
+    await signInWithEmailAndPassword(auth, $('email').value.trim(), $('password').value);
+  } catch (error) {
+    const code = typeof error.code === 'string' && /^auth\/[a-z0-9-]+$/.test(error.code) ? error.code : 'không xác định';
+    message.textContent = `${loginErrors[code] || 'Không thể đăng nhập. Kiểm tra cấu hình Firebase và kết nối.'} (Mã lỗi: ${code})`;
+  }
+});
 $('logout').onclick = () => signOut(auth);
 onAuthStateChanged(auth, async user => {
   if (unsubscribe) unsubscribe();
