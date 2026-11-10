@@ -92,11 +92,30 @@ public class RestaurantActivity extends AppCompatActivity {
     private void showBottomSheetDialog() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View view = getLayoutInflater().inflate(R.layout.dialog_basket_bottom_sheet, null);
-        android.widget.TextView summary = view.findViewById(R.id.tvEmptyBasket);
-        summary.setVisibility(View.VISIBLE);
-        StringBuilder description = new StringBuilder();
-        for (Food food : foodList) if (food.getQuantity() > 0) description.append(food.getName()).append(" × ").append(food.getQuantity()).append("\n");
-        summary.setText(description.length() == 0 ? "Giỏ hàng trống" : description.toString());
+        TextView empty = view.findViewById(R.id.tvEmptyBasket);
+        android.widget.LinearLayout basketItems = view.findViewById(R.id.basketItems);
+        ((TextView) view.findViewById(R.id.tvBasketStore)).setText(store.name + " · Món bạn đã chọn");
+        int selected = 0;
+        int subtotal = 0;
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        for (Food food : foodList) {
+            if (food.getQuantity() <= 0) continue;
+            selected += food.getQuantity();
+            subtotal += food.getPrice() * food.getQuantity();
+            View row = getLayoutInflater().inflate(R.layout.item_basket, basketItems, false);
+            ((ImageView) row.findViewById(R.id.basketImage)).setImageResource(food.getImageResId());
+            ((TextView) row.findViewById(R.id.basketName)).setText(food.getName());
+            ((TextView) row.findViewById(R.id.basketQuantity)).setText("Số lượng: " + food.getQuantity());
+            ((TextView) row.findViewById(R.id.basketPrice)).setText(formatter.format((long) food.getPrice() * food.getQuantity()).replace(',', '.') + " ₫");
+            basketItems.addView(row);
+        }
+        ((TextView) view.findViewById(R.id.tvSheetTotal)).setText(formatter.format(subtotal).replace(',', '.') + " ₫");
+        if (selected == 0) {
+            empty.setVisibility(View.VISIBLE);
+            basketItems.setVisibility(View.GONE);
+            view.findViewById(R.id.btnCheckout).setEnabled(false);
+            view.findViewById(R.id.btnCheckout).setAlpha(0.45f);
+        }
         view.findViewById(R.id.btnCheckout).setOnClickListener(v -> {
             java.util.ArrayList<java.util.Map<String, Object>> items = new java.util.ArrayList<>();
             int total = 0;
@@ -126,6 +145,10 @@ public class RestaurantActivity extends AppCompatActivity {
               }).show();
         });
         bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.setOnShowListener(dialog -> {
+            View bottom = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottom != null) bottom.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+        });
         bottomSheetDialog.show();
     }
 }
