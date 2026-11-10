@@ -29,7 +29,16 @@ public class DriverActivity extends AppCompatActivity {
         if (error != null) { TextView t = new TextView(this); t.setText("Không tải được đơn hàng: " + error.getMessage()); list.addView(t); return; }
         if (snap == null || snap.isEmpty()) { TextView t = new TextView(this); t.setText("Không có đơn hàng."); list.addView(t); return; }
         for (DocumentSnapshot doc : snap) {
-            TextView info = new TextView(this); info.setPadding(0,20,0,4); info.setText("#" + doc.getId().substring(0,8) + " · " + doc.getString("status") + "\n" + doc.getString("address") + "\n" + doc.getString("phone") + " · " + doc.getLong("total") + " ₫"); list.addView(info);
+            String store = "";
+            Object rawItems = doc.get("items");
+            if (rawItems instanceof java.util.List && !((java.util.List<?>) rawItems).isEmpty()) {
+                Object first = ((java.util.List<?>) rawItems).get(0);
+                if (first instanceof java.util.Map) {
+                    Object name = ((java.util.Map<?, ?>) first).get("storeName");
+                    if (name instanceof String) store = "\nCửa hàng: " + name;
+                }
+            }
+            TextView info = new TextView(this); info.setPadding(0,20,0,4); info.setText("#" + doc.getId().substring(0,8) + " · " + doc.getString("status") + store + "\n" + doc.getString("address") + "\n" + doc.getString("phone") + " · " + doc.getLong("total") + " ₫"); list.addView(info);
             String status = doc.getString("status");
             if (available || "accepted".equals(status)) { Button action = new Button(this); action.setText(available ? "Nhận đơn" : "Hoàn thành giao hàng"); list.addView(action);
                 action.setOnClickListener(v -> update(doc.getReference(), available)); }

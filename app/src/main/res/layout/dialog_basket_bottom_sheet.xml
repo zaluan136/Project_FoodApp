@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="View Basket"
+        android:text="Giỏ hàng"
         android:textColor="#2E7D32"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -43,7 +43,7 @@
         android:layout_height="52dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="#2E7D32"
-        android:text="Checkout"
+        android:text="Đặt hàng"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="16sp" />

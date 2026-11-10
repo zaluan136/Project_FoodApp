@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:text="View Basket"
+            android:text="Xem giỏ hàng"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -117,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="0 item"
+            android:text="0 món"
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
 

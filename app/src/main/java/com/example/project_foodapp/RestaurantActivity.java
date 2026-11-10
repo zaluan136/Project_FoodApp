@@ -21,12 +21,14 @@ public class RestaurantActivity extends AppCompatActivity {
     private TextView tvBasketItems, tvBasketTotal;
     private FoodAdapter foodAdapter;
     private List<Food> foodList;
+    private StoreCatalog.Store store;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
 
+        store = StoreCatalog.find(getIntent().getStringExtra("store_id"));
         initViews();
         setupListeners();
         setupRecyclerView();
@@ -38,6 +40,9 @@ public class RestaurantActivity extends AppCompatActivity {
         rvFoodMenu = findViewById(R.id.rvFoodMenu);
         tvBasketItems = findViewById(R.id.tvBasketItems);
         tvBasketTotal = findViewById(R.id.tvBasketTotal);
+        ((TextView) findViewById(R.id.tvRestaurantName)).setText(store.name);
+        ((TextView) findViewById(R.id.tvRestaurantAddress)).setText(store.address);
+        ((TextView) findViewById(R.id.tvRestaurantHours)).setText("Thực đơn mẫu · " + store.description);
     }
 
     private void setupListeners() {
@@ -58,9 +63,7 @@ public class RestaurantActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         rvFoodMenu.setLayoutManager(new LinearLayoutManager(this));
-        foodList = new ArrayList<>();
-
-        loadDummyData();
+        foodList = store.menu();
 
         foodAdapter = new FoodAdapter(foodList, new FoodAdapter.OnQuantityChangeListener() {
             @Override
@@ -69,12 +72,6 @@ public class RestaurantActivity extends AppCompatActivity {
             }
         });
         rvFoodMenu.setAdapter(foodAdapter);
-    }
-
-    private void loadDummyData() {
-        foodList.add(new Food("Black Coffee", 49000, R.drawable.ic_black_coffee));
-        foodList.add(new Food("Banh Mi", 39000, R.drawable.ic_banh_mi));
-        foodList.add(new Food("Milk Tea", 45000, R.drawable.ic_milk_tea));
     }
 
     private void updateBasketSummary() {
@@ -86,7 +83,7 @@ public class RestaurantActivity extends AppCompatActivity {
             totalPrice += (food.getPrice() * food.getQuantity());
         }
 
-        tvBasketItems.setText(totalItems + " item");
+        tvBasketItems.setText(totalItems + " món");
 
         DecimalFormat formatter = new DecimalFormat("#,###");
         tvBasketTotal.setText(formatter.format(totalPrice).replace(',', '.') + " VND");
@@ -105,6 +102,7 @@ public class RestaurantActivity extends AppCompatActivity {
             int total = 0;
             for (Food food : foodList) if (food.getQuantity() > 0) {
                 java.util.Map<String, Object> item = new java.util.HashMap<>();
+                item.put("storeId", store.id); item.put("storeName", store.name);
                 item.put("name", food.getName()); item.put("price", food.getPrice()); item.put("quantity", food.getQuantity());
                 items.add(item); total += food.getPrice() * food.getQuantity();
             }

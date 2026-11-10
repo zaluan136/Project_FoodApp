@@ -13,4 +13,6 @@
 
 ## Phạm vi hiện tại
 
-Khách đăng ký/đăng nhập, chọn món mẫu, nhập địa chỉ và số điện thoại để đặt hàng, xem trạng thái. Shipper xem đơn chờ, nhận đơn và xác nhận giao. Quản trị viên xem đơn theo thời gian thực. Đây là bản nền tảng: menu và giá đang nằm trong ứng dụng, máy chủ chưa xác thực giá; chưa có thanh toán, hủy đơn, chat, tìm tài xế gần nhất, xác thực xã hội hay quản lý thực đơn. Không dùng cho giao dịch thật trước khi bổ sung xác thực giá ở máy chủ, kiểm thử và hoàn thiện các luồng còn thiếu.
+Khách đăng ký/đăng nhập, chọn món mẫu, nhập địa chỉ và số điện thoại để đặt hàng, xem trạng thái. Shipper xem đơn chờ, nhận đơn và xác nhận giao. Quản trị viên xem đơn theo thời gian thực. Đây là bản nền tảng: menu, giá và một số chi nhánh là dữ liệu mẫu nằm trong ứng dụng, máy chủ chưa xác thực giá; chưa có thanh toán, hủy đơn, chat, tìm tài xế gần nhất, xác thực xã hội hay quản lý thực đơn. Không dùng cho giao dịch thật trước khi bổ sung xác thực giá ở máy chủ, kiểm thử và hoàn thiện các luồng còn thiếu.
+
+Danh mục mẫu gồm 7 Eleven, Circle K, Ministop và VinMart; mỗi cửa hàng có thực đơn riêng. Tên cửa hàng được lưu trong từng món của đơn để vẫn tương thích với quy tắc Firestore và đơn cũ. Khi quyền shipper thay đổi, đăng xuất và đăng nhập lại để nhận token mới.

@@ -71,6 +71,18 @@ public class OrderFragment extends Fragment {
         String label = "pending".equals(status) ? "Chờ nhận" : "accepted".equals(status) ? "Đang giao" : "delivered".equals(status) ? "Đã giao" : "Đang cập nhật";
         TextView badge = text(label, 12, "#166B46", true); badge.setBackgroundResource(R.drawable.bg_pill_green);
         badge.setPadding(dp(10), dp(6), dp(10), dp(6)); row.addView(badge);
+        Object rawItems = doc.get("items");
+        if (rawItems instanceof java.util.List && !((java.util.List<?>) rawItems).isEmpty()) {
+            Object first = ((java.util.List<?>) rawItems).get(0);
+            if (first instanceof java.util.Map) {
+                Object storeName = ((java.util.Map<?, ?>) first).get("storeName");
+                if (storeName instanceof String) {
+                    TextView storeLabel = text((String) storeName, 14, "#405D4C", true);
+                    LinearLayout.LayoutParams storeParams = new LinearLayout.LayoutParams(-1, -2);
+                    storeParams.topMargin = dp(14); card.addView(storeLabel, storeParams);
+                }
+            }
+        }
         Long total = doc.getLong("total");
         TextView amount = text(NumberFormat.getNumberInstance(new Locale("vi", "VN")).format(total == null ? 0 : total) + " ₫", 20, "#166B46", true);
         LinearLayout.LayoutParams amountParams = new LinearLayout.LayoutParams(-1, -2); amountParams.topMargin = dp(18); card.addView(amount, amountParams);

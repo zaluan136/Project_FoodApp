@@ -7,7 +7,7 @@
             <FrameLayout android:layout_width="88dp" android:layout_height="88dp" android:background="@drawable/bg_pill_green">
                 <ImageView android:layout_width="44dp" android:layout_height="44dp" android:layout_gravity="center" android:src="@drawable/icon_profile" android:tint="#166B46" android:contentDescription="" />
             </FrameLayout>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="Xin chào bạn!" android:textColor="#193B2B" android:textSize="21sp" android:textStyle="bold" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="Tài khoản FoodNow" android:textColor="#193B2B" android:textSize="21sp" android:textStyle="bold" />
             <TextView android:id="@+id/tvProfileEmail" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="Tài khoản FoodNow" android:textColor="#6F8075" android:textSize="14sp" />
         </LinearLayout>
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:background="@drawable/bg_surface" android:padding="20dp" android:orientation="vertical">

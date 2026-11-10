@@ -20,7 +20,7 @@ onAuthStateChanged(auth, async user => {
       if (snapshot.empty) $('orders').textContent = 'Chưa có đơn hàng.';
       snapshot.forEach(doc => { const o = doc.data(), card = document.createElement('article'); card.className = 'card';
         const title = document.createElement('h2'); title.textContent = `Đơn #${doc.id.slice(0, 8)} · ${Number(o.total || 0).toLocaleString('vi-VN')} ₫`;
-        const details = document.createElement('p'); details.textContent = `${o.address || ''} · ${o.phone || ''}`;
+        const details = document.createElement('p'); details.textContent = `${o.items?.[0]?.storeName || 'Cửa hàng chưa xác định'} · ${o.address || ''} · ${o.phone || ''}`;
         const items = document.createElement('p'); items.textContent = (o.items || []).map(i => `${i.name} × ${i.quantity}`).join(', ');
         const status = document.createElement('span'); status.className = 'status'; status.textContent = o.status || ''; card.append(title, details, items, status); $('orders').append(card); });
     }, () => { message.textContent = 'Không tải được đơn hàng. Kiểm tra quyền truy cập Firestore.'; });
