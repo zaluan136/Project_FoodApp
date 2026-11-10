@@ -35,6 +35,7 @@ public class RestaurantActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        store.showCover(findViewById(R.id.ivRestaurantBanner));
         btnBack = findViewById(R.id.btnBack);
         btnViewBasket = findViewById(R.id.btnViewBasket);
         rvFoodMenu = findViewById(R.id.rvFoodMenu);

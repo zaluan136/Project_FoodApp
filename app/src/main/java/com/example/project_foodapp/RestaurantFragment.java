@@ -21,6 +21,7 @@ public class RestaurantFragment extends Fragment {
         LinearLayout list = view.findViewById(R.id.storeList);
         for (StoreCatalog.Store store : StoreCatalog.stores()) {
             View card = getLayoutInflater().inflate(R.layout.item_store, list, false);
+            store.showCover(card.findViewById(R.id.storeCover));
             ((ImageView) card.findViewById(R.id.storeLogo)).setImageResource(store.logo);
             ((TextView) card.findViewById(R.id.storeName)).setText(store.name);
             ((TextView) card.findViewById(R.id.storeAddress)).setText(store.address);
