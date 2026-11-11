@@ -2,13 +2,13 @@
 
 FoodNow gồm ứng dụng Android cho khách hàng và shipper, cùng hai trang web riêng cho quản trị viên và shipper. Ứng dụng sử dụng Firebase Authentication và Cloud Firestore để lưu, theo dõi đơn hàng theo thời gian thực.
 
-## 1. Những gì cần có trước khi chạy
+## 1. Chuẩn bị
 
 - **Android Studio** để chạy ứng dụng Android; cài Android SDK Platform **37.0** và Build Tools **36.0.0** trong SDK Manager. Máy ảo Android hoặc điện thoại Android được bật USB debugging. iPhone không chạy trực tiếp ứng dụng Android; máy Mac có thể dùng máy ảo Android trong Android Studio.
 - **JDK 25** cho Gradle. Dự án có cấu hình tự tải Gradle 9.5 và JDK 25 khi cần; nếu tự tải không thành công, cài JDK 25 rồi chọn JDK 25 trong Android Studio → Settings/Preferences → Build, Execution, Deployment → Build Tools → Gradle → Gradle JDK.
 - Một máy chủ HTTP cho web: Python 3. Kiểm tra bằng `python3 --version` trên Mac hoặc `py --version` trên Windows. Nếu chưa có, cài Python từ <https://www.python.org/downloads/>; trên Windows chọn thêm Python vào PATH nếu trình cài đặt có tùy chọn.
-- Hai tệp cấu hình Firebase của **cùng dự án FoodNow** do sinh viên cung cấp: `app/google-services.json` và `web/firebase-config.js` đã điền cấu hình web. Bản clone mặc định **không có** tệp Android và tệp web chỉ chứa `REPLACE_ME`, vì vậy không thể tải GitHub rồi đăng nhập ngay nếu chưa nhận cấu hình. Đây không phải service-account private key; **không cần** gửi file service account để chạy ứng dụng.
-- Dự án Firebase phải còn hoạt động, bật phương thức Email/Password, có Cloud Firestore và đã triển khai `firestore.rules` của phiên bản này. Tài khoản admin và shipper cần được cấp đúng custom claim. Không cần cấp lại quyền hoặc triển khai rules.
+- Hai tệp cấu hình Firebase của **cùng dự án FoodNow** do sinh viên cung cấp: `app/google-services.json` và `web/firebase-config.js` đã điền cấu hình web. Bản clone mặc định **không có** tệp Android và tệp web chỉ chứa `REPLACE_ME`, vì vậy không thể tải GitHub rồi đăng nhập ngay nếu chưa nhận cấu hình. Không cần service account private key để chạy ứng dụng.
+- Dự án Firebase phải còn hoạt động, bật phương thức Email/Password, có Cloud Firestore và đã triển khai `firestore.rules` của phiên bản này. Tài khoản admin và shipper cần được cấp đúng custom claim. Nếu dự án đã được cấu hình, không cần thực hiện lại các bước này.
 
 ### Tài khoản kiểm thử
 
@@ -19,11 +19,11 @@ FoodNow gồm ứng dụng Android cho khách hàng và shipper, cùng hai trang
 | Khách hàng | `test@gmail.com` | Ứng dụng Android |
 
 
-## 2. Tải và chuẩn bị dự án
+## 2. Tải dự án
 
 1. Tải mã nguồn từ <https://github.com/zaluan136/Project_FoodApp> bằng nút **Code → Download ZIP**, giải nén, hoặc chạy `git clone https://github.com/zaluan136/Project_FoodApp.git` trong Terminal/PowerShell nếu có Git.
-2. Mở thư mục `Project_FoodApp`. Sao chép tệp sinh viên cung cấp là `google-services.json` vào thư mục `app`, sao cho đường dẫn là `Project_FoodApp/app/google-services.json`.
-3. Sao chép tệp cấu hình web sinh viên cung cấp vào `Project_FoodApp/web/firebase-config.js`, thay tệp mẫu. Nếu đã có quyền truy cập Firebase Console, cũng có thể điền cấu hình ứng dụng web vào tệp mẫu. Không đưa service account private key vào thư mục web.
+2. Mở thư mục `Project_FoodApp`. Sao chép tệp `google-services.json` vào thư mục `app`, sao cho đường dẫn là `Project_FoodApp/app/google-services.json`.
+3. Sao chép tệp cấu hình web vào `Project_FoodApp/web/firebase-config.js`, thay tệp mẫu. Nếu đã có quyền truy cập Firebase Console, cũng có thể điền cấu hình ứng dụng web vào tệp mẫu. Không đưa service account private key vào thư mục web.
 4. Xác nhận dự án Android và web trỏ tới cùng dự án Firebase. Nếu thiết lập Firebase mới, xem mục 6 bên dưới.
 
 ## 3. Chạy trang web admin và shipper
@@ -73,7 +73,7 @@ bash gradlew :app:assembleDebug
 
 Nếu Gradle không tìm thấy Android SDK, thiết lập SDK Location trong Android Studio hoặc cấu hình biến `ANDROID_HOME` trỏ tới SDK trên máy. Không cần tạo `local.properties` thủ công nếu Android Studio đã cấu hình SDK.
 
-## 5. Kịch bản kiểm thử
+## 5. Kiểm thử
 
 1. **Khách hàng — Android:** đăng nhập `test@gmail.com`; vào Khám phá, chọn cửa hàng và món, mở giỏ hàng, nhập tên người nhận, địa chỉ và số điện thoại rồi xác nhận. Kiểm tra thông báo thành công và mở mục Đơn hàng → Xem chi tiết. Dùng thông tin giao hàng minh họa khi kiểm thử.
 2. **Shipper — web hoặc Android:** đăng nhập `shipper@gmail.com`, chọn một đơn đang chờ → **Nhận đơn** → **Hoàn thành giao hàng**. Shipper chỉ thấy đơn chờ và đơn được giao cho mình.
@@ -84,7 +84,7 @@ Danh mục mẫu gồm 7 Eleven, Circle K, Ministop và VinMart; các món và g
 
 ## 6. Cấu hình Firebase cho người triển khai
 
-Phần này dành cho sinh viên/người quản lý dự án.
+Chỉ cần thực hiện phần này khi thiết lập dự án Firebase mới.
 
 1. Tạo hoặc chọn dự án Firebase; bật Authentication Email/Password và tạo Cloud Firestore. Đăng ký ứng dụng Android package `com.example.project_foodapp`, tải `google-services.json` đặt trong `app/`; tạo ứng dụng web trong cùng dự án và cập nhật `web/firebase-config.js`.
 2. Kiểm tra đúng dự án rồi triển khai rules: `firebase deploy --only firestore:rules --project <PROJECT_ID>`. Thao tác này cập nhật rules đang hoạt động, cần được người quản lý dự án thực hiện. Rules phiên bản hiện tại cho phép trường `recipientName`; nếu chưa triển khai, tạo đơn mới có thể báo `PERMISSION_DENIED`.
