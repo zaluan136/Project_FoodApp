@@ -127,23 +127,35 @@ public class RestaurantActivity extends AppCompatActivity {
                 items.add(item); total += food.getPrice() * food.getQuantity();
             }
             if (items.isEmpty()) { android.widget.Toast.makeText(this, "Giỏ hàng trống", android.widget.Toast.LENGTH_SHORT).show(); return; }
-            android.widget.LinearLayout fields = new android.widget.LinearLayout(this); fields.setOrientation(android.widget.LinearLayout.VERTICAL); fields.setPadding(32, 0, 32, 0);
-            android.widget.EditText address = new android.widget.EditText(this); address.setHint("Địa chỉ giao hàng"); fields.addView(address);
-            android.widget.EditText phone = new android.widget.EditText(this); phone.setHint("Số điện thoại"); phone.setInputType(android.text.InputType.TYPE_CLASS_PHONE); fields.addView(phone);
+            View deliveryView = getLayoutInflater().inflate(R.layout.dialog_delivery, null);
+            android.widget.EditText address = deliveryView.findViewById(R.id.deliveryAddress);
+            android.widget.EditText phone = deliveryView.findViewById(R.id.deliveryPhone);
+            androidx.appcompat.app.AlertDialog deliveryDialog = new androidx.appcompat.app.AlertDialog.Builder(this).setView(deliveryView).create();
+            deliveryDialog.setOnShowListener(ignored -> {
+                if (deliveryDialog.getWindow() != null) {
+                    deliveryDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    deliveryDialog.getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                }
+            });
+            deliveryView.findViewById(R.id.cancelDelivery).setOnClickListener(ignored -> deliveryDialog.dismiss());
             final int orderTotal = total;
-            new androidx.appcompat.app.AlertDialog.Builder(this).setTitle("Thông tin giao hàng").setView(fields).setNegativeButton("Hủy", null)
-              .setPositiveButton("Đặt hàng", (dialog, which) -> {
-                if (address.getText().toString().trim().isEmpty() || phone.getText().toString().trim().isEmpty()) { android.widget.Toast.makeText(this, "Cần địa chỉ và số điện thoại", android.widget.Toast.LENGTH_SHORT).show(); return; }
+            View confirm = deliveryView.findViewById(R.id.confirmDelivery);
+            confirm.setOnClickListener(ignored -> {
+                if (address.getText().toString().trim().isEmpty()) { address.setError("Vui lòng nhập địa chỉ giao hàng"); address.requestFocus(); return; }
+                if (phone.getText().toString().trim().isEmpty()) { phone.setError("Vui lòng nhập số điện thoại"); phone.requestFocus(); return; }
                 com.google.firebase.auth.FirebaseUser user = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
                 if (user == null) { android.widget.Toast.makeText(this, "Vui lòng đăng nhập", android.widget.Toast.LENGTH_SHORT).show(); return; }
                 java.util.Map<String, Object> order = new java.util.HashMap<>();
                 order.put("customerId", user.getUid()); order.put("address", address.getText().toString().trim()); order.put("phone", phone.getText().toString().trim());
                 order.put("items", items); order.put("total", orderTotal); order.put("status", "pending"); order.put("createdAt", com.google.firebase.firestore.FieldValue.serverTimestamp());
+                confirm.setEnabled(false);
                 com.google.firebase.firestore.FirebaseFirestore.getInstance().collection("orders").add(order).addOnSuccessListener(ref -> {
+                    deliveryDialog.dismiss();
                     for (Food food : foodList) food.setQuantity(0); foodAdapter.notifyDataSetChanged(); updateBasketSummary(); bottomSheetDialog.dismiss();
                     android.widget.Toast.makeText(this, "Đã đặt hàng", android.widget.Toast.LENGTH_SHORT).show();
-                }).addOnFailureListener(e -> android.widget.Toast.makeText(this, "Không thể đặt hàng: " + e.getLocalizedMessage(), android.widget.Toast.LENGTH_LONG).show());
-              }).show();
+                }).addOnFailureListener(e -> { confirm.setEnabled(true); android.widget.Toast.makeText(this, "Không thể đặt hàng: " + e.getLocalizedMessage(), android.widget.Toast.LENGTH_LONG).show(); });
+            });
+            deliveryDialog.show();
         });
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.setOnShowListener(dialog -> {
