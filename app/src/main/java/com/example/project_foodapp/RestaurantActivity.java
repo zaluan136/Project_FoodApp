@@ -90,6 +90,17 @@ public class RestaurantActivity extends AppCompatActivity {
         tvBasketTotal.setText(formatter.format(totalPrice).replace(',', '.') + " VND");
     }
 
+    private void showOrderSuccess() {
+        if (isFinishing() || isDestroyed()) return;
+        View successView = getLayoutInflater().inflate(R.layout.dialog_order_success, null);
+        androidx.appcompat.app.AlertDialog successDialog = new androidx.appcompat.app.AlertDialog.Builder(this).setView(successView).create();
+        successDialog.setOnShowListener(ignored -> {
+            if (successDialog.getWindow() != null) successDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        });
+        successView.findViewById(R.id.closeSuccess).setOnClickListener(ignored -> successDialog.dismiss());
+        successDialog.show();
+    }
+
     private void showBottomSheetDialog() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View view = getLayoutInflater().inflate(R.layout.dialog_basket_bottom_sheet, null);
@@ -152,7 +163,7 @@ public class RestaurantActivity extends AppCompatActivity {
                 com.google.firebase.firestore.FirebaseFirestore.getInstance().collection("orders").add(order).addOnSuccessListener(ref -> {
                     deliveryDialog.dismiss();
                     for (Food food : foodList) food.setQuantity(0); foodAdapter.notifyDataSetChanged(); updateBasketSummary(); bottomSheetDialog.dismiss();
-                    android.widget.Toast.makeText(this, "Đã đặt hàng", android.widget.Toast.LENGTH_SHORT).show();
+                    showOrderSuccess();
                 }).addOnFailureListener(e -> { confirm.setEnabled(true); android.widget.Toast.makeText(this, "Không thể đặt hàng: " + e.getLocalizedMessage(), android.widget.Toast.LENGTH_LONG).show(); });
             });
             deliveryDialog.show();
