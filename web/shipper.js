@@ -25,7 +25,7 @@ function render(list, snapshot, available) {
   snapshot.forEach(doc => {
     const order = doc.data(), card = document.createElement('article'); card.className = 'card';
     const title = document.createElement('h2'); title.textContent = `Đơn #${doc.id.slice(0, 8)} · ${Number(order.total || 0).toLocaleString('vi-VN')} ₫`;
-    const detail = document.createElement('p'); detail.textContent = `${order.items?.[0]?.storeName || 'Cửa hàng chưa xác định'} · ${order.address || ''} · ${order.phone || ''}`;
+    const detail = document.createElement('p'); detail.textContent = `${order.items?.[0]?.storeName || 'Cửa hàng chưa xác định'} · ${order.recipientName || 'Chưa có tên người nhận'} · ${order.address || ''} · ${order.phone || ''}`;
     const items = document.createElement('p'); items.textContent = (order.items || []).map(item => `${item.name} × ${item.quantity}`).join(', ');
     const status = document.createElement('span'); status.className = 'status'; status.textContent = ({ pending: 'Chờ nhận', accepted: 'Đang giao', delivered: 'Đã giao' })[order.status] || order.status || '';
     card.append(title, detail, items, status);

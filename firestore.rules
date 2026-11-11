@@ -6,10 +6,11 @@ service cloud.firestore {
     function shipper() { return signedIn() && request.auth.token.shipper == true; }
     match /orders/{orderId} {
       allow create: if signedIn()
-        && request.resource.data.keys().hasOnly(['customerId', 'address', 'phone', 'items', 'total', 'status', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['customerId', 'recipientName', 'address', 'phone', 'items', 'total', 'status', 'createdAt'])
         && request.resource.data.customerId == request.auth.uid
         && request.resource.data.status == 'pending'
         && request.resource.data.createdAt == request.time
+        && (!('recipientName' in request.resource.data) || (request.resource.data.recipientName is string && request.resource.data.recipientName.size() > 0 && request.resource.data.recipientName.size() <= 100))
         && request.resource.data.address is string && request.resource.data.address.size() > 0
         && request.resource.data.phone is string && request.resource.data.phone.size() > 0
         && request.resource.data.items is list && request.resource.data.items.size() > 0

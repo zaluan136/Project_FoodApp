@@ -139,6 +139,7 @@ public class RestaurantActivity extends AppCompatActivity {
             }
             if (items.isEmpty()) { android.widget.Toast.makeText(this, "Giỏ hàng trống", android.widget.Toast.LENGTH_SHORT).show(); return; }
             View deliveryView = getLayoutInflater().inflate(R.layout.dialog_delivery, null);
+            android.widget.EditText name = deliveryView.findViewById(R.id.deliveryName);
             android.widget.EditText address = deliveryView.findViewById(R.id.deliveryAddress);
             android.widget.EditText phone = deliveryView.findViewById(R.id.deliveryPhone);
             androidx.appcompat.app.AlertDialog deliveryDialog = new androidx.appcompat.app.AlertDialog.Builder(this).setView(deliveryView).create();
@@ -152,12 +153,13 @@ public class RestaurantActivity extends AppCompatActivity {
             final int orderTotal = total;
             View confirm = deliveryView.findViewById(R.id.confirmDelivery);
             confirm.setOnClickListener(ignored -> {
+                if (name.getText().toString().trim().isEmpty()) { name.setError("Vui lòng nhập tên người nhận"); name.requestFocus(); return; }
                 if (address.getText().toString().trim().isEmpty()) { address.setError("Vui lòng nhập địa chỉ giao hàng"); address.requestFocus(); return; }
                 if (phone.getText().toString().trim().isEmpty()) { phone.setError("Vui lòng nhập số điện thoại"); phone.requestFocus(); return; }
                 com.google.firebase.auth.FirebaseUser user = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
                 if (user == null) { android.widget.Toast.makeText(this, "Vui lòng đăng nhập", android.widget.Toast.LENGTH_SHORT).show(); return; }
                 java.util.Map<String, Object> order = new java.util.HashMap<>();
-                order.put("customerId", user.getUid()); order.put("address", address.getText().toString().trim()); order.put("phone", phone.getText().toString().trim());
+                order.put("customerId", user.getUid()); order.put("recipientName", name.getText().toString().trim()); order.put("address", address.getText().toString().trim()); order.put("phone", phone.getText().toString().trim());
                 order.put("items", items); order.put("total", orderTotal); order.put("status", "pending"); order.put("createdAt", com.google.firebase.firestore.FieldValue.serverTimestamp());
                 confirm.setEnabled(false);
                 com.google.firebase.firestore.FirebaseFirestore.getInstance().collection("orders").add(order).addOnSuccessListener(ref -> {

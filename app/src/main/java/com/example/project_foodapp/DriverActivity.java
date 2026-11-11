@@ -53,7 +53,7 @@ public class DriverActivity extends AppCompatActivity {
             LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(-1,-2); cardParams.setMargins(0,dp(10),0,0); list.addView(card,cardParams);
             String status = doc.getString("status");
             card.addView(text("ĐƠN #" + doc.getId().substring(0, Math.min(8, doc.getId().length())), 12, "#168755", true));
-            TextView info = text((store.isEmpty() ? "Đơn hàng" : store.trim()) + "\n" + doc.getString("address") + "\n" + doc.getString("phone") + "  ·  " + doc.getLong("total") + " ₫", 15, "#173B30", false);
+            TextView info = text((store.isEmpty() ? "Đơn hàng" : store.trim()) + "\nNgười nhận: " + (doc.getString("recipientName") == null ? "Chưa có tên" : doc.getString("recipientName")) + "\n" + doc.getString("address") + "\n" + doc.getString("phone") + "  ·  " + doc.getLong("total") + " ₫", 15, "#173B30", false);
             info.setLineSpacing(dp(6), 1); info.setPadding(0, dp(10), 0, dp(10)); card.addView(info);
             card.addView(text("pending".equals(status) ? "●  Chờ nhận" : "accepted".equals(status) ? "●  Đang giao" : "●  Đã giao", 13, "#168755", true));
             if (available || "accepted".equals(status)) { Button action = new Button(this); action.setText(available ? "Nhận đơn" : "Hoàn thành giao hàng"); styleButton(action, true); LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1,-2); params.topMargin=dp(14); card.addView(action,params);

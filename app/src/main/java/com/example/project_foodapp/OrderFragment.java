@@ -89,6 +89,49 @@ public class OrderFragment extends Fragment {
         String address = doc.getString("address");
         TextView destination = text("Giao đến  ·  " + (address == null ? "Chưa có địa chỉ" : address), 13, "#667B6D", false);
         destination.setLineSpacing(dp(3), 1); LinearLayout.LayoutParams addressParams = new LinearLayout.LayoutParams(-1, -2); addressParams.topMargin = dp(10); card.addView(destination, addressParams);
+        TextView more = text("Xem chi tiết  →", 13, "#168755", true);
+        LinearLayout.LayoutParams moreParams = new LinearLayout.LayoutParams(-1, -2); moreParams.topMargin = dp(14); card.addView(more, moreParams);
+        card.setFocusable(true); card.setClickable(true); card.setContentDescription("Xem chi tiết đơn " + doc.getId());
+        card.setOnClickListener(v -> showOrderDetails(doc));
+    }
+    private void showOrderDetails(DocumentSnapshot doc) {
+        ScrollView scroll = new ScrollView(requireContext()); scroll.setBackgroundResource(R.drawable.bg_delivery_dialog);
+        LinearLayout content = new LinearLayout(requireContext()); content.setOrientation(LinearLayout.VERTICAL); content.setPadding(dp(24), dp(24), dp(24), dp(24)); scroll.addView(content);
+        content.addView(text("CHI TIẾT ĐƠN HÀNG", 12, "#168755", true));
+        addDetail(content, "Đơn #" + doc.getId().substring(0, Math.min(8, doc.getId().length())), 23, true);
+        String status = doc.getString("status");
+        addDetail(content, "Trạng thái: " + ("pending".equals(status) ? "Chờ nhận" : "accepted".equals(status) ? "Đang giao" : "delivered".equals(status) ? "Đã giao" : "Đang cập nhật"), 14, false);
+        com.google.firebase.Timestamp created = doc.getTimestamp("createdAt");
+        if (created != null) addDetail(content, "Ngày đặt: " + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale("vi", "VN")).format(created.toDate()), 14, false);
+        addDetail(content, "Thông tin giao hàng", 17, true);
+        addDetail(content, "Người nhận: " + valueOrFallback(doc.getString("recipientName"), "Chưa có thông tin"), 14, false);
+        addDetail(content, "Số điện thoại: " + valueOrFallback(doc.getString("phone"), "Chưa có thông tin"), 14, false);
+        addDetail(content, "Địa chỉ: " + valueOrFallback(doc.getString("address"), "Chưa có thông tin"), 14, false);
+        addDetail(content, "Chi tiết món", 17, true);
+        Object raw = doc.get("items");
+        if (raw instanceof java.util.List && !((java.util.List<?>) raw).isEmpty()) {
+            for (Object item : (java.util.List<?>) raw) {
+                if (!(item instanceof java.util.Map)) continue;
+                java.util.Map<?, ?> values = (java.util.Map<?, ?>) item;
+                Object name = values.get("name"), quantity = values.get("quantity"), price = values.get("price");
+                long count = quantity instanceof Number ? ((Number) quantity).longValue() : 0;
+                long unit = price instanceof Number ? ((Number) price).longValue() : 0;
+                addDetail(content, (name == null ? "Món ăn" : name.toString()) + " × " + count + "\n" + money(unit) + " / món · " + money(unit * count), 14, false);
+            }
+        } else addDetail(content, "Không có thông tin món.", 14, false);
+        Long total = doc.getLong("total"); addDetail(content, "Tổng cộng: " + money(total == null ? 0 : total), 19, true);
+        androidx.appcompat.widget.AppCompatButton close = new androidx.appcompat.widget.AppCompatButton(requireContext());
+        close.setText("Đóng"); close.setAllCaps(false); close.setTextColor(Color.WHITE); close.setBackgroundResource(R.drawable.bg_button_green);
+        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(-1, dp(52)); buttonParams.topMargin = dp(24); content.addView(close, buttonParams);
+        androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(requireContext()).setView(scroll).create();
+        dialog.setOnShowListener(ignored -> { if (dialog.getWindow() != null) dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent); });
+        close.setOnClickListener(v -> dialog.dismiss()); dialog.show();
+    }
+    private String valueOrFallback(String value, String fallback) { return value == null || value.trim().isEmpty() ? fallback : value; }
+    private String money(long amount) { return NumberFormat.getNumberInstance(new Locale("vi", "VN")).format(amount) + " ₫"; }
+    private void addDetail(LinearLayout parent, String value, int size, boolean bold) {
+        TextView line = text(value, size, bold ? "#193B2B" : "#667B6D", bold); line.setLineSpacing(dp(3), 1);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -2); params.topMargin = dp(bold ? 18 : 8); parent.addView(line, params);
     }
     private void showMessage(String message) {
         TextView empty = text(message, 14, "#667B6D", false); empty.setBackgroundResource(R.drawable.bg_surface);
